@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        12
+Release:        13
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            http://www.bzip.org/
