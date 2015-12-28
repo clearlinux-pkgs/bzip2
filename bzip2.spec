@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        13
+Release:        14
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            http://www.bzip.org/
@@ -43,6 +43,11 @@ Data compressor.
 %build
 install %{SOURCE1} .
 install %{SOURCE2} .
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export CFLAGS="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3 -flto "
+export CXXFLAGS="$CXXFLAGS -fno-semantic-interposition -ffunction-sections -O3 -flto "
+
 autoreconf -vfi
 %configure
 
