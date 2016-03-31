@@ -54,7 +54,7 @@ export CFLAGS2="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3 -flt
 export CXXFLAGS="$CXXFLAGS -fno-semantic-interposition -ffunction-sections -O3 -flto "
 
 autoreconf -vfi
-CFLAGS="$CFLAGS -fprofile-generate " %configure
+CFLAGS="$CFLAGS -fprofile-generate -fprofile-dir=pgo/ " %configure
 
 make V=1 %{?_smp_mflags}
 ./bzip2 -9 manual.ps
@@ -63,7 +63,7 @@ make V=1 %{?_smp_mflags}
 rm -f bzip2 *.o
 make clean
 
-CFLAGS="$CFLAGS2 -fprofile-use" %configure
+CFLAGS="$CFLAGS2 -fprofile-use -fprofile-dir=pgo/" %configure
 
 make V=1 %{?_smp_mflags}
 
