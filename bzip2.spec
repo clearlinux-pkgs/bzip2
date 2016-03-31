@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        16
+Release:        17
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            http://www.bzip.org/
@@ -61,6 +61,7 @@ make V=1 %{?_smp_mflags}
 ./bzip2 -d manual.ps.bz2
 
 rm -f bzip2 *.o
+make clean
 
 CFLAGS="$CFLAGS2 -fprofile-use" %configure
 
