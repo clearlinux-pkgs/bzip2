@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        20
+Release:        21
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            http://www.bzip.org/
@@ -11,6 +11,7 @@ Source2:        Makefile.am
 BuildRequires:	autoconf automake-dev m4 gettext libtool-dev libtool
 
 Patch1: fasterfile.patch
+Patch2: cve-2016-3189.patch
 
 %description
 Data compressor.
@@ -43,6 +44,7 @@ Data compressor.
 %setup -q
 
 %patch1 -p1
+%patch2 -p1
 
 %build
 install %{SOURCE1} .
