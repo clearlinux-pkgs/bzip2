@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        22
+Release:        23
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            http://www.bzip.org/
@@ -17,6 +17,7 @@ BuildRequires: glibc-libc32
 
 Patch1: fasterfile.patch
 Patch2: cve-2016-3189.patch
+Patch3: makefile.patch
 
 %description
 Data compressor.
@@ -66,6 +67,7 @@ Data compressor.
 
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 pushd ..
 cp -a bzip2-%{version} build32
@@ -93,6 +95,7 @@ make clean
 CFLAGS="$CFLAGS2 -fprofile-use -fprofile-dir=pgo/" %configure
 
 make V=1 %{?_smp_mflags}
+make -f Makefile-libbz2_so all
 
 pushd ../build32
 install %{SOURCE1} .
@@ -104,6 +107,7 @@ autoreconf -vfi
 %configure --libdir=/usr/lib32  --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 
 make V=1 %{?_smp_mflags}
+make -f Makefile-libbz2_so all
 popd
 
 
@@ -112,9 +116,11 @@ popd
 pushd ../build32
 %make_install32
 rm -rf %{buildroot}/usr/bin
+cp -a libbz2.so.1*  %{buildroot}/usr/lib32/
 popd
 
 %make_install
+cp -a libbz2.so.1*  %{buildroot}/usr/lib64/
 
 %files
 /usr/bin/bzless
