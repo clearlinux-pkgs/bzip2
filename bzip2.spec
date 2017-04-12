@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        23
+Release:        25
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            http://www.bzip.org/
@@ -78,16 +78,22 @@ install %{SOURCE1} .
 install %{SOURCE2} .
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
-export CFLAGS="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3 -flto "
-export CFLAGS2="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3 -flto "
-export CXXFLAGS="$CXXFLAGS -fno-semantic-interposition -ffunction-sections -O3 -flto "
+export CFLAGS="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3  -fPIC "
+export CFLAGS2="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3  -fPIC  "
+export CXXFLAGS="$CXXFLAGS -fno-semantic-interposition -ffunction-sections -O3  -fPIC "
 
 autoreconf -vfi
 CFLAGS="$CFLAGS -fprofile-generate -fprofile-dir=pgo/ " %configure
 
 make V=1 %{?_smp_mflags}
-./bzip2 -9 manual.ps
-./bzip2 -d manual.ps.bz2
+
+cp /usr/bin/x86_64-generic-linux-gcc .
+LD_LIBRARY_PATH=. ./bzip2 -9 manual.ps
+LD_LIBRARY_PATH=. ./bzip2 -9 configure
+LD_LIBRARY_PATH=. ./bzip2 x86_64-generic-linux-gcc
+LD_LIBRARY_PATH=. ./bzip2 -d manual.ps.bz2
+LD_LIBRARY_PATH=. ./bzip2 -d configure.bz2
+LD_LIBRARY_PATH=. ./bzip2 -d x86_64-generic-linux-gcc.bz2
 
 rm -f bzip2 *.o
 make clean
@@ -100,9 +106,9 @@ make -f Makefile-libbz2_so all
 pushd ../build32
 install %{SOURCE1} .
 install %{SOURCE2} .
-export CFLAGS="$CFLAGS -m32"
-export CXXFLAGS="$CXXFLAGS -m32"
-export LDFLAGS="$LDFLAGS -m32"
+export CFLAGS="$CFLAGS2 -m32"
+export CXXFLAGS="$CXXFLAGS2 -m32"
+export LDFLAGS="$LDFLAGS2 -m32"
 autoreconf -vfi
 %configure --libdir=/usr/lib32  --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 
