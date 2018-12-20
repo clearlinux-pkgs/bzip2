@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        32
+Release:        33
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            https://sourceforge.net/projects/bzip2
