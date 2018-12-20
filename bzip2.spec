@@ -3,9 +3,9 @@ Version:        1.0.6
 Release:        32
 License:        bzip2-1.0.6
 Summary:        Data compressor
-Url:            http://www.bzip.org/
+Url:            https://sourceforge.net/projects/bzip2
 Group:          utils
-Source0:        http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+Source0:        https://sourceforge.net/projects/bzip2/files/bzip2-1.0.6.tar.gz
 Source1:        configure.ac
 Source2:        Makefile.am
 BuildRequires:	autoconf automake-dev m4 gettext libtool-dev libtool
