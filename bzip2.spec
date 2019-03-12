@@ -39,7 +39,7 @@ Data compressor.
 %package dev
 Summary:        Data compressor
 Group:          devel
-Requires:       %{name} = %{version}-%{release}
+Requires:       bzip2 = %{version}-%{release}
 
 %description dev
 Data compressor.
@@ -47,7 +47,7 @@ Data compressor.
 %package dev32
 Summary:        Data compressor
 Group:          devel
-Requires:       %{name} = %{version}-%{release}
+Requires:       bzip2 = %{version}-%{release}
 Requires: bzip2-dev
 
 %description dev32
@@ -156,11 +156,11 @@ cp -a libbz2.so.1*  %{buildroot}/usr/lib64/
 /usr/lib32/libbz2.so
 
 %files doc
-%{_mandir}/man1/bzegrep.1
-%{_mandir}/man1/bzdiff.1
-%{_mandir}/man1/bzcmp.1
-%{_mandir}/man1/bzfgrep.1
-%{_mandir}/man1/bzmore.1
-%{_mandir}/man1/bzip2.1
-%{_mandir}/man1/bzgrep.1
-%{_mandir}/man1/bzless.1
+/usr/share/man/man1/bzegrep.1
+/usr/share/man/man1/bzdiff.1
+/usr/share/man/man1/bzcmp.1
+/usr/share/man/man1/bzfgrep.1
+/usr/share/man/man1/bzmore.1
+/usr/share/man/man1/bzip2.1
+/usr/share/man/man1/bzgrep.1
+/usr/share/man/man1/bzless.1
