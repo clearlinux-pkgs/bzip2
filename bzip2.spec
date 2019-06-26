@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.6
-Release:        34
+Release:        35
 License:        bzip2-1.0.6
 Summary:        Data compressor
 Url:            https://sourceforge.net/projects/bzip2
@@ -18,7 +18,7 @@ BuildRequires: glibc-libc32
 Patch1: fasterfile.patch
 Patch2: cve-2016-3189.patch
 Patch3: makefile.patch
-Patch4: fix_oss_fuzz_14997.patch
+Patch4: CVE-2019-12900.patch
 Patch5: magicnumber.patch
 
 %description
