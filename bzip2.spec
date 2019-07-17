@@ -1,13 +1,14 @@
 Name:           bzip2
-Version:        1.0.6
-Release:        35
-License:        bzip2-1.0.6
+Version:        1.0.8
+Release:        36
+License:        BSD-3-Clause
 Summary:        Data compressor
-Url:            https://sourceforge.net/projects/bzip2
+Url:            https://sourceware.org/bzip2/
 Group:          utils
-Source0:        https://sourceforge.net/projects/bzip2/files/bzip2-1.0.6.tar.gz
+Source0:        https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source1:        configure.ac
 Source2:        Makefile.am
+Source3:        bzip2.pc.in
 BuildRequires:	autoconf automake-dev m4 gettext libtool-dev libtool
 BuildRequires: gcc-dev32
 BuildRequires: gcc-libgcc32
@@ -15,11 +16,9 @@ BuildRequires: gcc-libstdc++32
 BuildRequires: glibc-dev32
 BuildRequires: glibc-libc32
 
-Patch1: fasterfile.patch
-Patch2: cve-2016-3189.patch
-Patch3: makefile.patch
-Patch4: CVE-2019-12900.patch
-Patch5: magicnumber.patch
+Patch1: 0001-Improve-file-access.patch
+Patch2: 0002-provide-soname-compat-with-ubuntu.patch
+
 
 %description
 Data compressor.
@@ -69,9 +68,6 @@ Data compressor.
 
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 pushd ..
 cp -a bzip2-%{version} build32
@@ -80,11 +76,13 @@ popd
 %build
 install %{SOURCE1} .
 install %{SOURCE2} .
+install %{SOURCE3} .
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export CFLAGS="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3  -fPIC "
 export CFLAGS2="$CFLAGS -fno-semantic-interposition -ffunction-sections -O3  -fPIC  "
 export CXXFLAGS="$CXXFLAGS -fno-semantic-interposition -ffunction-sections -O3  -fPIC "
+export SOURCE_DATE_EPOCH=1563382605
 
 autoreconf -vfi
 CFLAGS="$CFLAGS -fprofile-generate -fprofile-dir=pgo/ " %configure
@@ -110,6 +108,7 @@ make -f Makefile-libbz2_so all
 pushd ../build32
 install %{SOURCE1} .
 install %{SOURCE2} .
+install %{SOURCE3} .
 export CFLAGS="$CFLAGS2 -m32"
 export CXXFLAGS="$CXXFLAGS2 -m32"
 export LDFLAGS="$LDFLAGS2 -m32"
@@ -127,10 +126,15 @@ pushd ../build32
 %make_install32
 rm -rf %{buildroot}/usr/bin
 cp -a libbz2.so.1*  %{buildroot}/usr/lib32/
+install -d %{buildroot}/usr/lib32/pkgconfig
+sed s,@libdir@,/usr/lib32, bzip2.pc.in > %{buildroot}/usr/lib32/pkgconfig/bzip2.pc
+ln -s bzip2.pc %{buildroot}/usr/lib32/pkgconfig/32bzip2.pc
 popd
 
 %make_install
 cp -a libbz2.so.1*  %{buildroot}/usr/lib64/
+install -d %{buildroot}/usr/lib64/pkgconfig
+sed s,@libdir@,/usr/lib64, bzip2.pc.in > %{buildroot}/usr/lib64/pkgconfig/bzip2.pc
 
 %files
 /usr/bin/bzless
@@ -154,10 +158,13 @@ cp -a libbz2.so.1*  %{buildroot}/usr/lib64/
 %files dev
 /usr/include/bzlib.h
 /usr/lib64/libbz2.so
+/usr/lib64/pkgconfig/bzip2.pc
 
 %files dev32
 /usr/include/bzlib.h
 /usr/lib32/libbz2.so
+/usr/lib32/pkgconfig/32bzip2.pc
+/usr/lib32/pkgconfig/bzip2.pc
 
 %files doc
 /usr/share/man/man1/bzegrep.1
