@@ -1,0 +1,6 @@
+# This file contains recursive sources that require this package
+compat-python36
+filesystem
+freetype
+python
+python3

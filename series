@@ -1,2 +1,2 @@
-fix_oss_fuzz_14997.patch
-magicnumber.patch
+0001-Autotoolize-bzip2.patch
+0002-Improve-file-access.patch

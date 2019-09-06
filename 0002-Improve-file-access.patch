@@ -1,7 +1,7 @@
-From 74177ebe376144ca4e3141d869334b31e5e95ee3 Mon Sep 17 00:00:00 2001
+From db0737d1c6954370ac9e872e0d6d30c90479e804 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Sat, 26 Mar 2016 19:28:57 -0700
-Subject: [PATCH] Improve file access
+Subject: [PATCH 2/2] Improve file access
 
 1) Don't open a file to find out if it exists. Use access(2).
 2) use the "m" flag to glibc's fopen(3), to use mmap(2).
@@ -44,5 +44,5 @@ index d95d280..8156f1a 100644
           if ( outStr == NULL) {
              fprintf ( stderr, "%s: Can't create output file %s: %s.\n",
 -- 
-2.22.0
+2.23.0
 

@@ -1,0 +1,7 @@
+cp /usr/bin/x86_64-generic-linux-gcc .
+LD_LIBRARY_PATH=. ./bzip2 -9 manual.ps
+LD_LIBRARY_PATH=. ./bzip2 -9 configure
+LD_LIBRARY_PATH=. ./bzip2 x86_64-generic-linux-gcc
+LD_LIBRARY_PATH=. ./bzip2 -d manual.ps.bz2
+LD_LIBRARY_PATH=. ./bzip2 -d configure.bz2
+LD_LIBRARY_PATH=. ./bzip2 -d x86_64-generic-linux-gcc.bz2
