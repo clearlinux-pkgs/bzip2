@@ -1,6 +1,6 @@
 Name:           bzip2
 Version:        1.0.8
-Release:        36
+Release:        37
 License:        BSD-3-Clause
 Summary:        Data compressor
 Url:            https://sourceware.org/bzip2/
@@ -49,6 +49,7 @@ Data compressor.
 Summary:        Data compressor
 Group:          devel
 Requires:       bzip2 = %{version}-%{release}
+Requires:       bzip2-lib32 = %{version}-%{release}
 Requires: bzip2-dev
 
 %description dev32
