@@ -6,7 +6,7 @@
 #
 Name     : bzip2
 Version  : 1.0.8
-Release  : 51
+Release  : 52
 URL      : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source0  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source1 : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
@@ -111,7 +111,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1568057279
+export SOURCE_DATE_EPOCH=1568307556
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -152,7 +152,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1568057279
+export SOURCE_DATE_EPOCH=1568307556
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/bzip2
 cp LICENSE %{buildroot}/usr/share/package-licenses/bzip2/LICENSE
@@ -173,10 +173,12 @@ ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1.0
 ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1.0
 rm -f %{buildroot}/usr/lib64/libbz2.so.0
 rm -f %{buildroot}/usr/lib32/libbz2.so.0
-cp %{buildroot}/usr/lib64/libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.0
-cp %{buildroot}/usr/lib32/libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.0
-patchelf --set-soname libbz2.so.0 %{buildroot}/usr/lib64/libbz2.so.0
-patchelf --set-soname libbz2.so.0 %{buildroot}/usr/lib32/libbz2.so.0
+cp %{buildroot}/usr/lib64/libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.0.0.0
+cp %{buildroot}/usr/lib32/libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.0.0.0
+patchelf --set-soname libbz2.so.0 %{buildroot}/usr/lib64/libbz2.so.0.0.0
+patchelf --set-soname libbz2.so.0 %{buildroot}/usr/lib32/libbz2.so.0.0.0
+ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib64/libbz2.so.0
+ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib32/libbz2.so.0
 rm -f %{buildroot}/usr/lib64/libbz2.so.1
 cp %{buildroot}/usr/lib64/libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1
 patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib64/libbz2.so.1
@@ -201,7 +203,7 @@ patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib64/libbz2.so.1
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
+/usr/include/bzlib.h
 /usr/lib64/libbz2.so
 /usr/lib64/pkgconfig/bzip2.pc
 
@@ -214,6 +216,7 @@ patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib64/libbz2.so.1
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libbz2.so.0
+/usr/lib64/libbz2.so.0.0.0
 /usr/lib64/libbz2.so.1
 /usr/lib64/libbz2.so.1.0
 /usr/lib64/libbz2.so.1.0.0
@@ -221,6 +224,7 @@ patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib64/libbz2.so.1
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libbz2.so.0
+/usr/lib32/libbz2.so.0.0.0
 /usr/lib32/libbz2.so.1
 /usr/lib32/libbz2.so.1.0
 /usr/lib32/libbz2.so.1.0.0
