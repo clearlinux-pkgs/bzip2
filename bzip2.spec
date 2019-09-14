@@ -6,7 +6,7 @@
 #
 Name     : bzip2
 Version  : 1.0.8
-Release  : 52
+Release  : 53
 URL      : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source0  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source1 : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
