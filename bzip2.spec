@@ -6,7 +6,7 @@
 #
 Name     : bzip2
 Version  : 1.0.8
-Release  : 53
+Release  : 54
 URL      : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source0  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source1 : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
@@ -111,7 +111,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1568307556
+export SOURCE_DATE_EPOCH=1571353182
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -124,11 +124,13 @@ export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -f
 export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
 export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
 export CXXFLAGS_GENERATE="$CXXFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
+export LDFLAGS_GENERATE="$LDFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
 export CFLAGS_USE="$CFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
 export FCFLAGS_USE="$FCFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
 export FFLAGS_USE="$FFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
 export CXXFLAGS_USE="$CXXFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
-CFLAGS="${CFLAGS_GENERATE}" CXXFLAGS="${CXXFLAGS_GENERATE}" FFLAGS="${FFLAGS_GENERATE}" FCFLAGS="${FCFLAGS_GENERATE}" %reconfigure --disable-static
+export LDFLAGS_USE="$LDFLAGS -fprofile-use -fprofile-dir=/var/tmp/pgo -fprofile-correction "
+CFLAGS="${CFLAGS_GENERATE}" CXXFLAGS="${CXXFLAGS_GENERATE}" FFLAGS="${FFLAGS_GENERATE}" FCFLAGS="${FCFLAGS_GENERATE}" LDFLAGS="${LDFLAGS_GENERATE}" %reconfigure --disable-static
 make  %{?_smp_mflags}
 
 cp /usr/bin/x86_64-generic-linux-gcc .
@@ -139,7 +141,7 @@ LD_LIBRARY_PATH=. ./bzip2 -d manual.ps.bz2
 LD_LIBRARY_PATH=. ./bzip2 -d configure.bz2
 LD_LIBRARY_PATH=. ./bzip2 -d x86_64-generic-linux-gcc.bz2
 make clean
-CFLAGS="${CFLAGS_USE}" CXXFLAGS="${CXXFLAGS_USE}" FFLAGS="${FFLAGS_USE}" FCFLAGS="${FCFLAGS_USE}" %reconfigure --disable-static
+CFLAGS="${CFLAGS_USE}" CXXFLAGS="${CXXFLAGS_USE}" FFLAGS="${FFLAGS_USE}" FCFLAGS="${FCFLAGS_USE}" LDFLAGS="${LDFLAGS_USE}" %reconfigure --disable-static
 make  %{?_smp_mflags}
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
@@ -152,10 +154,10 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1568307556
+export SOURCE_DATE_EPOCH=1571353182
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/bzip2
-cp LICENSE %{buildroot}/usr/share/package-licenses/bzip2/LICENSE
+cp %{_builddir}/bzip2-1.0.8/LICENSE %{buildroot}/usr/share/package-licenses/bzip2/ddf157bc55ed6dec9541e4af796294d666cd0926
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -182,6 +184,7 @@ ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib32/libbz2.so.0
 rm -f %{buildroot}/usr/lib64/libbz2.so.1
 cp %{buildroot}/usr/lib64/libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1
 patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib64/libbz2.so.1
+ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1.0.6
 ## install_append end
 
 %files
@@ -228,10 +231,11 @@ patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib64/libbz2.so.1
 /usr/lib32/libbz2.so.1
 /usr/lib32/libbz2.so.1.0
 /usr/lib32/libbz2.so.1.0.0
+/usr/lib32/libbz2.so.1.0.6
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/bzip2/LICENSE
+/usr/share/package-licenses/bzip2/ddf157bc55ed6dec9541e4af796294d666cd0926
 
 %files man
 %defattr(0644,root,root,0755)
