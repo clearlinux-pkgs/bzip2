@@ -1,0 +1,63 @@
+From 4a7426d2c5c855dc5da1999e7980d17c4d5b2701 Mon Sep 17 00:00:00 2001
+From: Leandro Dorileo <leandro.maciel.dorileo@intel.com>
+Date: Wed, 18 Dec 2019 13:53:02 -0800
+Subject: [PATCH] libbz2: add 0.0 compat library
+
+Currently to maintain backward compatibility in the packaging we copy the installed
+libbz2 files and use patchelf to change the soname (DT_SONAME), however patchelf is
+breaking the gnu-build-id section after reallocating it - resulting on readelf and
+eu-readelf to fail.
+
+This patch changes the build system to install a libbz2-compat.so.0 and
+libbz2-compat.so.0.0 with the proper soname (libbz2.so.0), in the packaging we
+simply rename the files to libbz2.so.0 and libbz2.so.0.0.
+
+Signed-off-by: Leandro Dorileo <leandro.maciel.dorileo@intel.com>
+---
+ Makefile.am  | 12 +++++++++++-
+ configure.ac |  2 ++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 636f6b8..d3e1be8 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,4 +1,4 @@
+-lib_LTLIBRARIES = libbz2.la
++lib_LTLIBRARIES = libbz2.la libbz2-compat.la
+ 
+ libbz2_la_LDFLAGS = -version-info 1:0:0 -Wl,-soname,libbz2.so.1.0
+ 
+@@ -10,6 +10,16 @@ libbz2_la_SOURCES = blocksort.c  \
+                     decompress.c \
+                     bzlib.c
+ 
++libbz2_compat_la_LDFLAGS = -version-info 0:0:0 -Wl,-soname,libbz2.so.0
++
++libbz2_compat_la_SOURCES = blocksort.c  \
++                    huffman.c    \
++                    crctable.c   \
++                    randtable.c  \
++                    compress.c   \
++                    decompress.c \
++                    bzlib.c
++
+ bin_PROGRAMS = bzip2 bzip2recover
+ 
+ bzip2_SOURCES = bzip2.c
+diff --git a/configure.ac b/configure.ac
+index 5269f56..f523d3e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -10,6 +10,8 @@ AM_MAINTAINER_MODE
+ AC_PROG_CC
+ AC_PROG_LIBTOOL
+ 
++AC_SUBST([soname_spec], [' '])
++
+ AC_CHECK_FUNCS([strerror])
+ AC_CHECK_FUNCS([strrchr])
+ AC_CHECK_FUNCS([strstr])
+-- 
+2.24.1
+

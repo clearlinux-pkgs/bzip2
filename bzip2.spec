@@ -6,10 +6,10 @@
 #
 Name     : bzip2
 Version  : 1.0.8
-Release  : 54
+Release  : 55
 URL      : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source0  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
-Source1 : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
+Source1  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
 Summary  : Data compressor
 Group    : Development/Tools
 License  : bzip2-1.0.6
@@ -25,6 +25,7 @@ BuildRequires : glibc-libc32
 BuildRequires : patchelf
 Patch1: 0001-Autotoolize-bzip2.patch
 Patch2: 0002-Improve-file-access.patch
+Patch3: 0003-libbz2-add-0.0-compat-library.patch
 
 %description
 This version is fully compatible with the previous public releases.
@@ -100,8 +101,10 @@ man components for the bzip2 package.
 
 %prep
 %setup -q -n bzip2-1.0.8
+cd %{_builddir}/bzip2-1.0.8
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 pushd ..
 cp -a bzip2-1.0.8 build32
 popd
@@ -111,7 +114,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1571353182
+export SOURCE_DATE_EPOCH=1576786384
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -154,7 +157,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1571353182
+export SOURCE_DATE_EPOCH=1576786384
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/bzip2
 cp %{_builddir}/bzip2-1.0.8/LICENSE %{buildroot}/usr/share/package-licenses/bzip2/ddf157bc55ed6dec9541e4af796294d666cd0926
@@ -169,22 +172,18 @@ fi
 popd
 %make_install
 ## install_append content
-patchelf --set-soname libbz2.so.1.0 %{buildroot}/usr/lib64/libbz2.so.1.0.0
-patchelf --set-soname libbz2.so.1.0 %{buildroot}/usr/lib32/libbz2.so.1.0.0
-ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1.0
-ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1.0
-rm -f %{buildroot}/usr/lib64/libbz2.so.0
-rm -f %{buildroot}/usr/lib32/libbz2.so.0
-cp %{buildroot}/usr/lib64/libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.0.0.0
-cp %{buildroot}/usr/lib32/libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.0.0.0
-patchelf --set-soname libbz2.so.0 %{buildroot}/usr/lib64/libbz2.so.0.0.0
-patchelf --set-soname libbz2.so.0 %{buildroot}/usr/lib32/libbz2.so.0.0.0
-ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib64/libbz2.so.0
-ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib32/libbz2.so.0
-rm -f %{buildroot}/usr/lib64/libbz2.so.1
-cp %{buildroot}/usr/lib64/libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1
-patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib64/libbz2.so.1
-ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1.0.6
+# fix SONAME so all dependent libraries are happy with this
+for curr in 32 64; do
+rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so
+rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so.0
+rm -f %{buildroot}/usr/lib${curr}/libbz2.so.1
+cp %{buildroot}/usr/lib${curr}/libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1
+mv %{buildroot}/usr/lib${curr}/libbz2-compat.so.0.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0.0.0
+ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0
+ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1.0
+ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.%{version}
+rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so*
+done
 ## install_append end
 
 %files
@@ -223,6 +222,7 @@ ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1.0.6
 /usr/lib64/libbz2.so.1
 /usr/lib64/libbz2.so.1.0
 /usr/lib64/libbz2.so.1.0.0
+/usr/lib64/libbz2.so.1.0.8
 
 %files lib32
 %defattr(-,root,root,-)
@@ -231,7 +231,7 @@ ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1.0.6
 /usr/lib32/libbz2.so.1
 /usr/lib32/libbz2.so.1.0
 /usr/lib32/libbz2.so.1.0.0
-/usr/lib32/libbz2.so.1.0.6
+/usr/lib32/libbz2.so.1.0.8
 
 %files license
 %defattr(0644,root,root,0755)
