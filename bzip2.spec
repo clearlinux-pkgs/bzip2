@@ -6,7 +6,7 @@
 #
 Name     : bzip2
 Version  : 1.0.8
-Release  : 55
+Release  : 56
 URL      : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source0  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source1  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
@@ -114,7 +114,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1576786384
+export SOURCE_DATE_EPOCH=1576794897
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -157,7 +157,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1576786384
+export SOURCE_DATE_EPOCH=1576794897
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/bzip2
 cp %{_builddir}/bzip2-1.0.8/LICENSE %{buildroot}/usr/share/package-licenses/bzip2/ddf157bc55ed6dec9541e4af796294d666cd0926
@@ -177,9 +177,9 @@ for curr in 32 64; do
 rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so
 rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so.0
 rm -f %{buildroot}/usr/lib${curr}/libbz2.so.1
-cp %{buildroot}/usr/lib${curr}/libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1
 mv %{buildroot}/usr/lib${curr}/libbz2-compat.so.0.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0.0.0
 ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0
+ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1
 ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1.0
 ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.%{version}
 rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so*
