@@ -6,7 +6,7 @@
 #
 Name     : bzip2
 Version  : 1.0.8
-Release  : 56
+Release  : 57
 URL      : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source0  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source1  : https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
@@ -114,14 +114,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1576794897
+export SOURCE_DATE_EPOCH=1605311581
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
 export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=/var/tmp/pgo -fprofile-update=atomic "
@@ -157,7 +157,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1576794897
+export SOURCE_DATE_EPOCH=1605311581
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/bzip2
 cp %{_builddir}/bzip2-1.0.8/LICENSE %{buildroot}/usr/share/package-licenses/bzip2/ddf157bc55ed6dec9541e4af796294d666cd0926
