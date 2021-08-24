@@ -1,12 +1,15 @@
 # fix SONAME so all dependent libraries are happy with this
 for curr in 32 64; do
-    rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so
-    rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so.0
-    rm -f %{buildroot}/usr/lib${curr}/libbz2.so.1
-    mv %{buildroot}/usr/lib${curr}/libbz2-compat.so.0.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0.0.0
-    ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0
-    ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1
+    patchelf --set-soname libbz2.so.1.0 %{buildroot}/usr/lib${curr}/libbz2.so.1.0.0
     ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1.0
+    # create compat libs as well
+    rm -f %{buildroot}/usr/lib${curr}/libbz2.so.0
+    cp %{buildroot}/usr/lib${curr}/libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0.0.0
+    patchelf --set-soname libbz2.so.0 %{buildroot}/usr/lib${curr}/libbz2.so.0.0.0
+    ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.0
+    rm -f %{buildroot}/usr/lib${curr}/libbz2.so.1
+    cp %{buildroot}/usr/lib${curr}/libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.1
+    patchelf --set-soname libbz2.so.1 %{buildroot}/usr/lib${curr}/libbz2.so.1
+    # for steam
     ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib${curr}/libbz2.so.%{version}
-    rm -f %{buildroot}/usr/lib${curr}/libbz2-compat.so*
 done
