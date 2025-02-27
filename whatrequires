@@ -1,6 +1,5 @@
 # This file contains recursive sources that require this package
+compat-python3-rolling
 filesystem
-gvfs
 python
 python3
-python37
